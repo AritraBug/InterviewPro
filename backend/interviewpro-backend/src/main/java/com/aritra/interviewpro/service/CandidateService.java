@@ -1,5 +1,5 @@
 package com.aritra.interviewpro.service;
-
+import com.aritra.interviewpro.exception.CandidateNotFoundException;
 import com.aritra.interviewpro.dto.CandidateRequestDto;
 import com.aritra.interviewpro.dto.CandidateResponseDto;
 import com.aritra.interviewpro.entity.Candidate;
@@ -49,6 +49,6 @@ public class CandidateService {
     public Candidate getCandidateById(Long id) {
         return candidateRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Candidate not found"));
+                        new CandidateNotFoundException("Candidate not found"));
     }
 }
