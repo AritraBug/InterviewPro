@@ -43,4 +43,10 @@ public class CandidateController {
                 requestDto
         );
     }
+    @DeleteMapping("/{id}")
+    public void deleteCandidate(
+            @PathVariable Long id
+    ) {
+        candidateService.deleteCandidate(id);
+    }
 }

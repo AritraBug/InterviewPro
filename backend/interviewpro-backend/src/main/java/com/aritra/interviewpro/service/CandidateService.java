@@ -80,4 +80,14 @@ public class CandidateService {
                 .orElseThrow(() ->
                         new CandidateNotFoundException("Candidate not found"));
     }
+    public void deleteCandidate(Long id) {
+
+        Candidate candidate = candidateRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new CandidateNotFoundException(
+                                "Candidate not found"));
+
+        candidateRepository.delete(candidate);
+    }
 }
