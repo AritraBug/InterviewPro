@@ -9,6 +9,7 @@ import com.aritra.interviewpro.dto.CandidateResponseDto;
 import jakarta.validation.Valid;
 import com.aritra.interviewpro.service.InterviewService;
 import com.aritra.interviewpro.dto.InterviewResponseDto;
+import org.springframework.data.domain.Page;
 @RestController
 @RequestMapping("/api/candidates")
 public class CandidateController {
@@ -67,5 +68,20 @@ public class CandidateController {
 
         return candidateService
                 .searchCandidatesByName(name);
+    }
+    @GetMapping("/paginated")
+    public Page<Candidate> getCandidatesPaginated(
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "5")
+            int size
+    ) {
+
+        return candidateService
+                .getCandidatesPaginated(
+                        page,
+                        size
+                );
     }
 }

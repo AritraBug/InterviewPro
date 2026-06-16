@@ -56,4 +56,13 @@ public class InterviewController {
         return interviewService
                 .getInterviewsByStatus(status);
     }
+    @GetMapping("/interviewer/{name}")
+    public List<InterviewResponseDto>
+    getInterviewsByInterviewer(
+            @PathVariable String name
+    ) {
+
+        return interviewService
+                .getInterviewsByInterviewer(name);
+    }
 }

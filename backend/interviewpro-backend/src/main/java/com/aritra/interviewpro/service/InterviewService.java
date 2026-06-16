@@ -2,18 +2,19 @@ package com.aritra.interviewpro.service;
 
 import com.aritra.interviewpro.dto.InterviewRequestDto;
 import com.aritra.interviewpro.dto.InterviewResponseDto;
+import com.aritra.interviewpro.dto.InterviewStatusUpdateDto;
 import com.aritra.interviewpro.entity.Candidate;
 import com.aritra.interviewpro.entity.Interview;
+import com.aritra.interviewpro.enums.InterviewStatus;
 import com.aritra.interviewpro.exception.CandidateNotFoundException;
+import com.aritra.interviewpro.exception.InvalidStatusTransitionException;
 import com.aritra.interviewpro.repository.CandidateRepository;
 import com.aritra.interviewpro.repository.InterviewRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import com.aritra.interviewpro.dto.InterviewStatusUpdateDto;
-import com.aritra.interviewpro.enums.InterviewStatus;
-import com.aritra.interviewpro.exception.InvalidStatusTransitionException;
-import java.util.stream.Collectors;
+
 @Service
 public class InterviewService {
 
@@ -27,28 +28,15 @@ public class InterviewService {
         this.interviewRepository = interviewRepository;
         this.candidateRepository = candidateRepository;
     }
+
     public List<InterviewResponseDto> getAllInterviews() {
 
         return interviewRepository.findAll()
                 .stream()
-                .map(interview ->
-                        InterviewResponseDto.builder()
-                                .id(interview.getId())
-                                .title(interview.getTitle())
-                                .interviewer(interview.getInterviewer())
-                                .scheduledAt(interview.getScheduledAt())
-                                .status(interview.getStatus())
-                                .mode(interview.getMode())
-                                .meetingLink(interview.getMeetingLink())
-                                .location(interview.getLocation())
-                                .notes(interview.getNotes())
-                                .candidateId(
-                                        interview.getCandidate().getId()
-                                )
-                                .build()
-                )
+                .map(this::mapToResponseDto)
                 .collect(Collectors.toList());
     }
+
     public InterviewResponseDto scheduleInterview(
             InterviewRequestDto requestDto
     ) {
@@ -75,21 +63,9 @@ public class InterviewService {
         Interview savedInterview =
                 interviewRepository.save(interview);
 
-        return InterviewResponseDto.builder()
-                .id(savedInterview.getId())
-                .title(savedInterview.getTitle())
-                .interviewer(savedInterview.getInterviewer())
-                .scheduledAt(savedInterview.getScheduledAt())
-                .status(savedInterview.getStatus())
-                .mode(savedInterview.getMode())
-                .meetingLink(savedInterview.getMeetingLink())
-                .location(savedInterview.getLocation())
-                .notes(savedInterview.getNotes())
-                .candidateId(
-                        savedInterview.getCandidate().getId()
-                )
-                .build();
+        return mapToResponseDto(savedInterview);
     }
+
     public List<InterviewResponseDto> getInterviewsByCandidateId(
             Long candidateId
     ) {
@@ -102,24 +78,10 @@ public class InterviewService {
         return interviewRepository
                 .findByCandidateId(candidateId)
                 .stream()
-                .map(interview ->
-                        InterviewResponseDto.builder()
-                                .id(interview.getId())
-                                .title(interview.getTitle())
-                                .interviewer(interview.getInterviewer())
-                                .scheduledAt(interview.getScheduledAt())
-                                .status(interview.getStatus())
-                                .mode(interview.getMode())
-                                .meetingLink(interview.getMeetingLink())
-                                .location(interview.getLocation())
-                                .notes(interview.getNotes())
-                                .candidateId(
-                                        interview.getCandidate().getId()
-                                )
-                                .build()
-                )
-                .toList();
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
     }
+
     public InterviewResponseDto updateInterviewStatus(
             Long interviewId,
             InterviewStatusUpdateDto requestDto
@@ -147,21 +109,33 @@ public class InterviewService {
         Interview savedInterview =
                 interviewRepository.save(interview);
 
-        return InterviewResponseDto.builder()
-                .id(savedInterview.getId())
-                .title(savedInterview.getTitle())
-                .interviewer(savedInterview.getInterviewer())
-                .scheduledAt(savedInterview.getScheduledAt())
-                .status(savedInterview.getStatus())
-                .mode(savedInterview.getMode())
-                .meetingLink(savedInterview.getMeetingLink())
-                .location(savedInterview.getLocation())
-                .notes(savedInterview.getNotes())
-                .candidateId(
-                        savedInterview.getCandidate().getId()
-                )
-                .build();
+        return mapToResponseDto(savedInterview);
     }
+
+    public List<InterviewResponseDto> getInterviewsByStatus(
+            InterviewStatus status
+    ) {
+
+        return interviewRepository
+                .findByStatus(status)
+                .stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<InterviewResponseDto> getInterviewsByInterviewer(
+            String interviewer
+    ) {
+
+        return interviewRepository
+                .findByInterviewerContainingIgnoreCase(
+                        interviewer
+                )
+                .stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
+    }
+
     private void validateStatusTransition(
             InterviewStatus currentStatus,
             InterviewStatus newStatus
@@ -198,30 +172,24 @@ public class InterviewService {
                         + newStatus
         );
     }
-    public List<InterviewResponseDto>
-    getInterviewsByStatus(
-            InterviewStatus status
+
+    private InterviewResponseDto mapToResponseDto(
+            Interview interview
     ) {
 
-        return interviewRepository
-                .findByStatus(status)
-                .stream()
-                .map(interview ->
-                        InterviewResponseDto.builder()
-                                .id(interview.getId())
-                                .title(interview.getTitle())
-                                .interviewer(interview.getInterviewer())
-                                .scheduledAt(interview.getScheduledAt())
-                                .status(interview.getStatus())
-                                .mode(interview.getMode())
-                                .meetingLink(interview.getMeetingLink())
-                                .location(interview.getLocation())
-                                .notes(interview.getNotes())
-                                .candidateId(
-                                        interview.getCandidate().getId()
-                                )
-                                .build()
+        return InterviewResponseDto.builder()
+                .id(interview.getId())
+                .title(interview.getTitle())
+                .interviewer(interview.getInterviewer())
+                .scheduledAt(interview.getScheduledAt())
+                .status(interview.getStatus())
+                .mode(interview.getMode())
+                .meetingLink(interview.getMeetingLink())
+                .location(interview.getLocation())
+                .notes(interview.getNotes())
+                .candidateId(
+                        interview.getCandidate().getId()
                 )
-                .collect(Collectors.toList());
+                .build();
     }
 }

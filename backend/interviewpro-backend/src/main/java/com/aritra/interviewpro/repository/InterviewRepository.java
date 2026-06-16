@@ -17,4 +17,7 @@ public interface InterviewRepository
     List<Interview> findByStatus(
             InterviewStatus status
     );
+    List<Interview> findByInterviewerContainingIgnoreCase(
+            String interviewer
+    );
 }
