@@ -22,4 +22,8 @@ public class CandidateController {
     public List<Candidate> getAllCandidates() {
         return candidateService.getAllCandidates();
     }
+    @GetMapping("/{id}")
+    public Candidate getCandidateById(@PathVariable Long id) {
+        return candidateService.getCandidateById(id);
+    }
 }
