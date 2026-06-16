@@ -8,7 +8,8 @@ import com.aritra.interviewpro.exception.CandidateNotFoundException;
 import com.aritra.interviewpro.repository.CandidateRepository;
 import com.aritra.interviewpro.repository.InterviewRepository;
 import org.springframework.stereotype.Service;
-
+import java.util.List;
+import java.util.stream.Collectors;
 @Service
 public class InterviewService {
 
@@ -22,7 +23,28 @@ public class InterviewService {
         this.interviewRepository = interviewRepository;
         this.candidateRepository = candidateRepository;
     }
+    public List<InterviewResponseDto> getAllInterviews() {
 
+        return interviewRepository.findAll()
+                .stream()
+                .map(interview ->
+                        InterviewResponseDto.builder()
+                                .id(interview.getId())
+                                .title(interview.getTitle())
+                                .interviewer(interview.getInterviewer())
+                                .scheduledAt(interview.getScheduledAt())
+                                .status(interview.getStatus())
+                                .mode(interview.getMode())
+                                .meetingLink(interview.getMeetingLink())
+                                .location(interview.getLocation())
+                                .notes(interview.getNotes())
+                                .candidateId(
+                                        interview.getCandidate().getId()
+                                )
+                                .build()
+                )
+                .collect(Collectors.toList());
+    }
     public InterviewResponseDto scheduleInterview(
             InterviewRequestDto requestDto
     ) {
@@ -63,5 +85,35 @@ public class InterviewService {
                         savedInterview.getCandidate().getId()
                 )
                 .build();
+    }
+    public List<InterviewResponseDto> getInterviewsByCandidateId(
+            Long candidateId
+    ) {
+
+        candidateRepository.findById(candidateId)
+                .orElseThrow(() ->
+                        new CandidateNotFoundException(
+                                "Candidate not found"));
+
+        return interviewRepository
+                .findByCandidateId(candidateId)
+                .stream()
+                .map(interview ->
+                        InterviewResponseDto.builder()
+                                .id(interview.getId())
+                                .title(interview.getTitle())
+                                .interviewer(interview.getInterviewer())
+                                .scheduledAt(interview.getScheduledAt())
+                                .status(interview.getStatus())
+                                .mode(interview.getMode())
+                                .meetingLink(interview.getMeetingLink())
+                                .location(interview.getLocation())
+                                .notes(interview.getNotes())
+                                .candidateId(
+                                        interview.getCandidate().getId()
+                                )
+                                .build()
+                )
+                .toList();
     }
 }

@@ -7,14 +7,18 @@ import java.util.List;
 import com.aritra.interviewpro.dto.CandidateRequestDto;
 import com.aritra.interviewpro.dto.CandidateResponseDto;
 import jakarta.validation.Valid;
+import com.aritra.interviewpro.service.InterviewService;
+import com.aritra.interviewpro.dto.InterviewResponseDto;
 @RestController
 @RequestMapping("/api/candidates")
 public class CandidateController {
 
     private final CandidateService candidateService;
+    private final InterviewService interviewService;
 
-    public CandidateController(CandidateService candidateService) {
+    public CandidateController(CandidateService candidateService, InterviewService interviewService) {
         this.candidateService = candidateService;
+        this.interviewService = interviewService;
     }
 
     @PostMapping
@@ -23,6 +27,13 @@ public class CandidateController {
     ) {
 
         return candidateService.saveCandidate(requestDto);
+    }
+    @GetMapping("/{id}/interviews")
+    public List<InterviewResponseDto> getCandidateInterviews(
+            @PathVariable Long id
+    ) {
+        return interviewService
+                .getInterviewsByCandidateId(id);
     }
     @GetMapping
     public List<Candidate> getAllCandidates() {

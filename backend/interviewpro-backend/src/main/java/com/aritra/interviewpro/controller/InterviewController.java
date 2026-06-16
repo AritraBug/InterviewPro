@@ -5,7 +5,7 @@ import com.aritra.interviewpro.dto.InterviewResponseDto;
 import com.aritra.interviewpro.service.InterviewService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 @RestController
 @RequestMapping("/api/interviews")
 public class InterviewController {
@@ -26,5 +26,10 @@ public class InterviewController {
 
         return interviewService
                 .scheduleInterview(requestDto);
+    }
+    @GetMapping
+    public List<InterviewResponseDto> getAllInterviews() {
+
+        return interviewService.getAllInterviews();
     }
 }
