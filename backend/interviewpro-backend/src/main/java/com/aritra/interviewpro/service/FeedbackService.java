@@ -10,6 +10,8 @@ import com.aritra.interviewpro.repository.InterviewRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FeedbackService {
@@ -66,25 +68,32 @@ public class FeedbackService {
         Feedback savedFeedback =
                 feedbackRepository.save(feedback);
 
-        return FeedbackResponseDto.builder()
-                .id(savedFeedback.getId())
-                .interviewerName(
-                        savedFeedback.getInterviewerName())
-                .technicalScore(
-                        savedFeedback.getTechnicalScore())
-                .communicationScore(
-                        savedFeedback.getCommunicationScore())
-                .problemSolvingScore(
-                        savedFeedback.getProblemSolvingScore())
-                .recommendation(
-                        savedFeedback.getRecommendation())
-                .comments(
-                        savedFeedback.getComments())
-                .submittedAt(
-                        savedFeedback.getSubmittedAt())
-                .interviewId(
-                        savedFeedback.getInterview().getId())
-                .build();
+        return mapToResponseDto(savedFeedback);
+    }
+
+    public List<FeedbackResponseDto> getAllFeedbacks() {
+
+        return feedbackRepository.findAll()
+                .stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<FeedbackResponseDto> getFeedbacksByInterviewId(
+            Long interviewId
+    ) {
+
+        Interview interview = interviewRepository
+                .findById(interviewId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Interview not found"));
+
+        return feedbackRepository
+                .findByInterviewId(interview.getId())
+                .stream()
+                .map(this::mapToResponseDto)
+                .collect(Collectors.toList());
     }
 
     private void validateInterviewStatus(
@@ -100,5 +109,30 @@ public class FeedbackService {
             throw new RuntimeException(
                     "Feedback can only be submitted for completed interviews");
         }
+    }
+
+    private FeedbackResponseDto mapToResponseDto(
+            Feedback feedback
+    ) {
+
+        return FeedbackResponseDto.builder()
+                .id(feedback.getId())
+                .interviewerName(
+                        feedback.getInterviewerName())
+                .technicalScore(
+                        feedback.getTechnicalScore())
+                .communicationScore(
+                        feedback.getCommunicationScore())
+                .problemSolvingScore(
+                        feedback.getProblemSolvingScore())
+                .recommendation(
+                        feedback.getRecommendation())
+                .comments(
+                        feedback.getComments())
+                .submittedAt(
+                        feedback.getSubmittedAt())
+                .interviewId(
+                        feedback.getInterview().getId())
+                .build();
     }
 }
