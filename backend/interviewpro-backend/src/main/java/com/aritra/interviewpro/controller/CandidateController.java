@@ -4,6 +4,9 @@ import com.aritra.interviewpro.entity.Candidate;
 import com.aritra.interviewpro.service.CandidateService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import com.aritra.interviewpro.dto.CandidateRequestDto;
+import com.aritra.interviewpro.dto.CandidateResponseDto;
+import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/candidates")
 public class CandidateController {
@@ -15,8 +18,10 @@ public class CandidateController {
     }
 
     @PostMapping
-    public Candidate createCandidate(@RequestBody Candidate candidate) {
-        return candidateService.saveCandidate(candidate);
+    public CandidateResponseDto createCandidate(
+            @Valid @RequestBody CandidateRequestDto requestDto
+    ) {
+        return candidateService.saveCandidate(requestDto);
     }
     @GetMapping
     public List<Candidate> getAllCandidates() {
