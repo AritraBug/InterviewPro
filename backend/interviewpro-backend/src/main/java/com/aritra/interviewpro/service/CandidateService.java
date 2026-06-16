@@ -90,4 +90,11 @@ public class CandidateService {
 
         candidateRepository.delete(candidate);
     }
+    public List<Candidate> searchCandidatesByName(
+            String name
+    ) {
+
+        return candidateRepository
+                .findByNameContainingIgnoreCase(name);
+    }
 }

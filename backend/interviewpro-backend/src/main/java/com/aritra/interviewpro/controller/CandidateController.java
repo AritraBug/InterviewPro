@@ -60,4 +60,12 @@ public class CandidateController {
     ) {
         candidateService.deleteCandidate(id);
     }
+    @GetMapping("/search")
+    public List<Candidate> searchCandidates(
+            @RequestParam String name
+    ) {
+
+        return candidateService
+                .searchCandidatesByName(name);
+    }
 }

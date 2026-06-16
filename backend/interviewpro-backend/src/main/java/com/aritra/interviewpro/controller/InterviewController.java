@@ -5,6 +5,7 @@ import com.aritra.interviewpro.dto.InterviewResponseDto;
 import com.aritra.interviewpro.dto.InterviewStatusUpdateDto;
 import com.aritra.interviewpro.service.InterviewService;
 import jakarta.validation.Valid;
+import com.aritra.interviewpro.enums.InterviewStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
@@ -45,5 +46,14 @@ public class InterviewController {
                         id,
                         requestDto
                 );
+    }
+    @GetMapping("/status/{status}")
+    public List<InterviewResponseDto>
+    getInterviewsByStatus(
+            @PathVariable InterviewStatus status
+    ) {
+
+        return interviewService
+                .getInterviewsByStatus(status);
     }
 }

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import com.aritra.interviewpro.dto.InterviewStatusUpdateDto;
 import com.aritra.interviewpro.enums.InterviewStatus;
 import com.aritra.interviewpro.exception.InvalidStatusTransitionException;
+import java.util.stream.Collectors;
 @Service
 public class InterviewService {
 
@@ -196,5 +197,31 @@ public class InterviewService {
                         + " to "
                         + newStatus
         );
+    }
+    public List<InterviewResponseDto>
+    getInterviewsByStatus(
+            InterviewStatus status
+    ) {
+
+        return interviewRepository
+                .findByStatus(status)
+                .stream()
+                .map(interview ->
+                        InterviewResponseDto.builder()
+                                .id(interview.getId())
+                                .title(interview.getTitle())
+                                .interviewer(interview.getInterviewer())
+                                .scheduledAt(interview.getScheduledAt())
+                                .status(interview.getStatus())
+                                .mode(interview.getMode())
+                                .meetingLink(interview.getMeetingLink())
+                                .location(interview.getLocation())
+                                .notes(interview.getNotes())
+                                .candidateId(
+                                        interview.getCandidate().getId()
+                                )
+                                .build()
+                )
+                .collect(Collectors.toList());
     }
 }

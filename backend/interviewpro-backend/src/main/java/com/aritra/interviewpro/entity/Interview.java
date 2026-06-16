@@ -5,7 +5,7 @@ import com.aritra.interviewpro.enums.InterviewStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 
 @Entity
@@ -42,5 +42,6 @@ public class Interview {
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
     @OneToMany(mappedBy = "interview")
+    @JsonIgnore
     private List<Feedback> feedbacks;
 }

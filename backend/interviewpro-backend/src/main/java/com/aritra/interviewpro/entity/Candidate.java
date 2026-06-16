@@ -1,5 +1,5 @@
 package com.aritra.interviewpro.entity;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
@@ -25,5 +25,6 @@ public class Candidate {
 
     private String skills;
     @OneToMany(mappedBy = "candidate")
+    @JsonIgnore
     private List<Interview> interviews;
 }
