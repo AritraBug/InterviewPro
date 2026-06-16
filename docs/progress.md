@@ -29,3 +29,9 @@ Phase 3
 - Request Validation
 - Custom Exceptions
 - Global Exception Handling
+
+Phase 4
+- Update Candidate API
+- Delete Candidate API
+
+Candidate Module V1 Complete

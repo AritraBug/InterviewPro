@@ -2,6 +2,7 @@ package com.aritra.interviewpro.controller;
 
 import com.aritra.interviewpro.dto.InterviewRequestDto;
 import com.aritra.interviewpro.dto.InterviewResponseDto;
+import com.aritra.interviewpro.dto.InterviewStatusUpdateDto;
 import com.aritra.interviewpro.service.InterviewService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +32,18 @@ public class InterviewController {
     public List<InterviewResponseDto> getAllInterviews() {
 
         return interviewService.getAllInterviews();
+    }
+    @PatchMapping("/{id}/status")
+    public InterviewResponseDto updateInterviewStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody
+            InterviewStatusUpdateDto requestDto
+    ) {
+
+        return interviewService
+                .updateInterviewStatus(
+                        id,
+                        requestDto
+                );
     }
 }

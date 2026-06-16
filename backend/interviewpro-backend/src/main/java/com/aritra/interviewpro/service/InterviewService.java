@@ -10,6 +10,9 @@ import com.aritra.interviewpro.repository.InterviewRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.aritra.interviewpro.dto.InterviewStatusUpdateDto;
+import com.aritra.interviewpro.enums.InterviewStatus;
+import com.aritra.interviewpro.exception.InvalidStatusTransitionException;
 @Service
 public class InterviewService {
 
@@ -115,5 +118,83 @@ public class InterviewService {
                                 .build()
                 )
                 .toList();
+    }
+    public InterviewResponseDto updateInterviewStatus(
+            Long interviewId,
+            InterviewStatusUpdateDto requestDto
+    ) {
+
+        Interview interview = interviewRepository
+                .findById(interviewId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Interview not found"));
+
+        InterviewStatus currentStatus =
+                interview.getStatus();
+
+        InterviewStatus newStatus =
+                requestDto.getStatus();
+
+        validateStatusTransition(
+                currentStatus,
+                newStatus
+        );
+
+        interview.setStatus(newStatus);
+
+        Interview savedInterview =
+                interviewRepository.save(interview);
+
+        return InterviewResponseDto.builder()
+                .id(savedInterview.getId())
+                .title(savedInterview.getTitle())
+                .interviewer(savedInterview.getInterviewer())
+                .scheduledAt(savedInterview.getScheduledAt())
+                .status(savedInterview.getStatus())
+                .mode(savedInterview.getMode())
+                .meetingLink(savedInterview.getMeetingLink())
+                .location(savedInterview.getLocation())
+                .notes(savedInterview.getNotes())
+                .candidateId(
+                        savedInterview.getCandidate().getId()
+                )
+                .build();
+    }
+    private void validateStatusTransition(
+            InterviewStatus currentStatus,
+            InterviewStatus newStatus
+    ) {
+
+        if (currentStatus ==
+                InterviewStatus.SCHEDULED) {
+
+            if (newStatus ==
+                    InterviewStatus.COMPLETED
+                    ||
+                    newStatus ==
+                            InterviewStatus.CANCELLED) {
+                return;
+            }
+        }
+
+        if (currentStatus ==
+                InterviewStatus.COMPLETED) {
+
+            if (newStatus ==
+                    InterviewStatus.SELECTED
+                    ||
+                    newStatus ==
+                            InterviewStatus.REJECTED) {
+                return;
+            }
+        }
+
+        throw new InvalidStatusTransitionException(
+                "Invalid status transition from "
+                        + currentStatus
+                        + " to "
+                        + newStatus
+        );
     }
 }
