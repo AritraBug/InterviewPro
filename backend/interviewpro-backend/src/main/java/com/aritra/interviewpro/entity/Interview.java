@@ -4,6 +4,7 @@ import com.aritra.interviewpro.enums.InterviewMode;
 import com.aritra.interviewpro.enums.InterviewStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 import java.time.LocalDateTime;
 
@@ -40,4 +41,6 @@ public class Interview {
     @ManyToOne
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
+    @OneToMany(mappedBy = "interview")
+    private List<Feedback> feedbacks;
 }
