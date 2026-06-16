@@ -2,7 +2,7 @@ package com.aritra.interviewpro.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.util.List;
 @Entity
 @Table(name = "candidates")
 @Getter
@@ -24,4 +24,6 @@ public class Candidate {
     private String college;
 
     private String skills;
+    @OneToMany(mappedBy = "candidate")
+    private List<Interview> interviews;
 }
