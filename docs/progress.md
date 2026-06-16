@@ -24,5 +24,8 @@
 - POST /api/candidates
 - Candidate Persistence in MySQL
 
-## Next
-- GET /api/candidates
+Phase 3
+- DTO Architecture
+- Request Validation
+- Custom Exceptions
+- Global Exception Handling
