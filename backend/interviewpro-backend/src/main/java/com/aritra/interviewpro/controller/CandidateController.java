@@ -21,6 +21,7 @@ public class CandidateController {
     public CandidateResponseDto createCandidate(
             @Valid @RequestBody CandidateRequestDto requestDto
     ) {
+
         return candidateService.saveCandidate(requestDto);
     }
     @GetMapping
@@ -30,5 +31,16 @@ public class CandidateController {
     @GetMapping("/{id}")
     public Candidate getCandidateById(@PathVariable Long id) {
         return candidateService.getCandidateById(id);
+    }
+    @PutMapping("/{id}")
+    public CandidateResponseDto updateCandidate(
+            @PathVariable Long id,
+            @Valid @RequestBody CandidateRequestDto requestDto
+    ) {
+
+        return candidateService.updateCandidate(
+                id,
+                requestDto
+        );
     }
 }

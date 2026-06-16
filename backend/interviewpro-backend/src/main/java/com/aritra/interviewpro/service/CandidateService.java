@@ -41,6 +41,35 @@ public class CandidateService {
                 .skills(savedCandidate.getSkills())
                 .build();
     }
+    public CandidateResponseDto updateCandidate(
+            Long id,
+            CandidateRequestDto requestDto
+    ) {
+
+        Candidate candidate = candidateRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new CandidateNotFoundException(
+                                "Candidate not found"));
+
+        candidate.setName(requestDto.getName());
+        candidate.setEmail(requestDto.getEmail());
+        candidate.setPhone(requestDto.getPhone());
+        candidate.setCollege(requestDto.getCollege());
+        candidate.setSkills(requestDto.getSkills());
+
+        Candidate updatedCandidate =
+                candidateRepository.save(candidate);
+
+        return CandidateResponseDto.builder()
+                .id(updatedCandidate.getId())
+                .name(updatedCandidate.getName())
+                .email(updatedCandidate.getEmail())
+                .phone(updatedCandidate.getPhone())
+                .college(updatedCandidate.getCollege())
+                .skills(updatedCandidate.getSkills())
+                .build();
+    }
 
     public List<Candidate> getAllCandidates() {
         return candidateRepository.findAll();
