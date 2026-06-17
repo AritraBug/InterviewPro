@@ -42,6 +42,9 @@ public class DashboardService {
                 .scheduledInterviews(
                         interviewRepository.countByStatus(
                                 InterviewStatus.SCHEDULED))
+                .completedInterviews(
+                        interviewRepository.countByStatus(
+                                InterviewStatus.COMPLETED))
                 .build();
     }
 }

@@ -18,4 +18,6 @@ public class DashboardResponseDto {
     private Long rejectedInterviews;
 
     private Long scheduledInterviews;
+
+    private Long completedInterviews;
 }
