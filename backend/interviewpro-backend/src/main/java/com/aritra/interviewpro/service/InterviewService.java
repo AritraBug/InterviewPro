@@ -65,6 +65,87 @@ public class InterviewService {
 
         return mapToResponseDto(savedInterview);
     }
+    public InterviewResponseDto updateInterview(
+            Long id,
+            InterviewRequestDto requestDto
+    ) {
+
+        Interview interview =
+                interviewRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Interview not found"
+                                ));
+
+        Candidate candidate =
+                candidateRepository.findById(
+                                requestDto.getCandidateId()
+                        )
+                        .orElseThrow(() ->
+                                new CandidateNotFoundException(
+                                        "Candidate not found"
+                                ));
+
+        interview.setTitle(
+                requestDto.getTitle()
+        );
+
+        interview.setInterviewer(
+                requestDto.getInterviewer()
+        );
+
+        interview.setScheduledAt(
+                requestDto.getScheduledAt()
+        );
+
+        interview.setStatus(
+                requestDto.getStatus()
+        );
+
+        interview.setMode(
+                requestDto.getMode()
+        );
+
+        interview.setMeetingLink(
+                requestDto.getMeetingLink()
+        );
+
+        interview.setLocation(
+                requestDto.getLocation()
+        );
+
+        interview.setNotes(
+                requestDto.getNotes()
+        );
+
+        interview.setCandidate(
+                candidate
+        );
+
+        Interview updatedInterview =
+                interviewRepository.save(
+                        interview
+                );
+
+        return mapToResponseDto(
+                updatedInterview
+        );
+    }
+    public void deleteInterview(
+            Long id
+    ) {
+
+        Interview interview =
+                interviewRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Interview not found"
+                                ));
+
+        interviewRepository.delete(
+                interview
+        );
+    }
 
     public List<InterviewResponseDto> getInterviewsByCandidateId(
             Long candidateId
@@ -189,6 +270,9 @@ public class InterviewService {
                 .notes(interview.getNotes())
                 .candidateId(
                         interview.getCandidate().getId()
+                )
+                .candidateName(
+                        interview.getCandidate().getName()
                 )
                 .build();
     }

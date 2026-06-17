@@ -29,6 +29,28 @@ public class InterviewController {
         return interviewService
                 .scheduleInterview(requestDto);
     }
+    @PutMapping("/{id}")
+    public InterviewResponseDto updateInterview(
+            @PathVariable Long id,
+            @Valid @RequestBody
+            InterviewRequestDto requestDto
+    ) {
+
+        return interviewService
+                .updateInterview(
+                        id,
+                        requestDto
+                );
+    }
+    @DeleteMapping("/{id}")
+    public void deleteInterview(
+            @PathVariable Long id
+    ) {
+
+        interviewService.deleteInterview(
+                id
+        );
+    }
     @GetMapping
     public List<InterviewResponseDto> getAllInterviews() {
 

@@ -30,4 +30,5 @@ public class InterviewResponseDto {
     private String notes;
 
     private Long candidateId;
+    private String candidateName;
 }
