@@ -13,13 +13,16 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public AuthService(
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public String register(
@@ -72,8 +75,13 @@ public class AuthService {
             );
         }
 
+        String token =
+                jwtService.generateToken(
+                        user.getEmail()
+                );
+
         return new AuthResponseDto(
-                "LOGIN_SUCCESS"
+                token
         );
     }
 }

@@ -6,6 +6,7 @@ import com.aritra.interviewpro.service.FeedbackService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 @RestController
 @RequestMapping("/api/interviews")
 public class FeedbackController {
@@ -17,7 +18,9 @@ public class FeedbackController {
     ) {
         this.feedbackService = feedbackService;
     }
-
+    @PreAuthorize(
+            "hasRole('INTERVIEWER') or hasRole('ADMIN')"
+    )
     @PostMapping("/{id}/feedback")
     public FeedbackResponseDto submitFeedback(
             @PathVariable Long id,
@@ -30,6 +33,9 @@ public class FeedbackController {
                 requestDto
         );
     }
+    @PreAuthorize(
+            "hasRole('ADMIN') or hasRole('RECRUITER') or hasRole('INTERVIEWER')"
+    )
     @GetMapping("/feedbacks")
     public List<FeedbackResponseDto> getAllFeedbacks() {
 

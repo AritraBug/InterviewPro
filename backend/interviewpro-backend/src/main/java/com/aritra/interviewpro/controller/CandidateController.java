@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import com.aritra.interviewpro.service.InterviewService;
 import com.aritra.interviewpro.dto.InterviewResponseDto;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 @RestController
 @RequestMapping("/api/candidates")
 public class CandidateController {
@@ -21,7 +22,9 @@ public class CandidateController {
         this.candidateService = candidateService;
         this.interviewService = interviewService;
     }
-
+    @PreAuthorize(
+            "hasRole('ADMIN') or hasRole('RECRUITER')"
+    )
     @PostMapping
     public CandidateResponseDto createCandidate(
             @Valid @RequestBody CandidateRequestDto requestDto
@@ -36,6 +39,9 @@ public class CandidateController {
         return interviewService
                 .getInterviewsByCandidateId(id);
     }
+    @PreAuthorize(
+            "hasRole('ADMIN') or hasRole('RECRUITER')"
+    )
     @GetMapping
     public List<Candidate> getAllCandidates() {
         return candidateService.getAllCandidates();
