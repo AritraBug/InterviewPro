@@ -6,6 +6,7 @@ import com.aritra.interviewpro.repository.CandidateRepository;
 import com.aritra.interviewpro.repository.FeedbackRepository;
 import com.aritra.interviewpro.repository.InterviewRepository;
 import org.springframework.stereotype.Service;
+import com.aritra.interviewpro.enums.Recommendation;
 
 @Service
 public class DashboardService {
@@ -27,24 +28,56 @@ public class DashboardService {
     public DashboardResponseDto getDashboardStats() {
 
         return DashboardResponseDto.builder()
+
                 .totalCandidates(
                         candidateRepository.count())
+
                 .totalInterviews(
                         interviewRepository.count())
+
                 .totalFeedbacks(
                         feedbackRepository.count())
+
                 .selectedInterviews(
                         interviewRepository.countByStatus(
                                 InterviewStatus.SELECTED))
+
                 .rejectedInterviews(
                         interviewRepository.countByStatus(
                                 InterviewStatus.REJECTED))
+
                 .scheduledInterviews(
                         interviewRepository.countByStatus(
                                 InterviewStatus.SCHEDULED))
+
                 .completedInterviews(
                         interviewRepository.countByStatus(
                                 InterviewStatus.COMPLETED))
+
+                .cancelledInterviews(
+                        interviewRepository.countByStatus(
+                                InterviewStatus.CANCELLED))
+
+                .strongHireCount(
+                        feedbackRepository
+                                .countByRecommendation(
+                                        Recommendation.STRONG_HIRE))
+
+                .hireCount(
+                        feedbackRepository
+                                .countByRecommendation(
+                                        Recommendation.HIRE))
+
+                .holdCount(
+                        feedbackRepository
+                                .countByRecommendation(
+                                        Recommendation.HOLD))
+
+                .rejectCount(
+                        feedbackRepository
+                                .countByRecommendation(
+                                        Recommendation.REJECT))
+
                 .build();
     }
 }

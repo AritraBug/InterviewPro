@@ -33,6 +33,26 @@ public class FeedbackController {
                 requestDto
         );
     }
+    @PutMapping("/feedbacks/{id}")
+    public FeedbackResponseDto updateFeedback(
+            @PathVariable Long id,
+            @Valid @RequestBody
+            FeedbackRequestDto requestDto
+    ) {
+
+        return feedbackService.updateFeedback(
+                id,
+                requestDto
+        );
+    }
+
+    @DeleteMapping("/feedbacks/{id}")
+    public void deleteFeedback(
+            @PathVariable Long id
+    ) {
+
+        feedbackService.deleteFeedback(id);
+    }
     @PreAuthorize(
             "hasRole('ADMIN') or hasRole('RECRUITER') or hasRole('INTERVIEWER')"
     )

@@ -95,6 +95,66 @@ public class FeedbackService {
                 .map(this::mapToResponseDto)
                 .collect(Collectors.toList());
     }
+    public FeedbackResponseDto updateFeedback(
+            Long id,
+            FeedbackRequestDto requestDto
+    ) {
+
+        Feedback feedback =
+                feedbackRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Feedback not found"
+                                ));
+
+        feedback.setInterviewerName(
+                requestDto.getInterviewerName()
+        );
+
+        feedback.setTechnicalScore(
+                requestDto.getTechnicalScore()
+        );
+
+        feedback.setCommunicationScore(
+                requestDto.getCommunicationScore()
+        );
+
+        feedback.setProblemSolvingScore(
+                requestDto.getProblemSolvingScore()
+        );
+
+        feedback.setRecommendation(
+                requestDto.getRecommendation()
+        );
+
+        feedback.setComments(
+                requestDto.getComments()
+        );
+
+        Feedback updatedFeedback =
+                feedbackRepository.save(
+                        feedback
+                );
+
+        return mapToResponseDto(
+                updatedFeedback
+        );
+    }
+    public void deleteFeedback(
+            Long id
+    ) {
+
+        Feedback feedback =
+                feedbackRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Feedback not found"
+                                ));
+
+        feedbackRepository.delete(
+                feedback
+        );
+    }
 
     private void validateInterviewStatus(
             Interview interview

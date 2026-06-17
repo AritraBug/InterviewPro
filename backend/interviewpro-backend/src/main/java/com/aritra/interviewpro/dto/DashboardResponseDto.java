@@ -20,4 +20,13 @@ public class DashboardResponseDto {
     private Long scheduledInterviews;
 
     private Long completedInterviews;
+    private Long cancelledInterviews;
+
+    private Long strongHireCount;
+
+    private Long hireCount;
+
+    private Long holdCount;
+
+    private Long rejectCount;
 }
