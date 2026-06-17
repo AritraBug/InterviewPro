@@ -1,157 +1,101 @@
-# InterviewPro – Development Progress
+# InterviewPro Progress
 
 ## Project Overview
 
-InterviewPro is a full-stack interview management platform designed to streamline candidate hiring workflows.
+InterviewPro is a full-stack recruitment and interview management platform built using:
 
-The system allows recruiters and interviewers to manage candidates, schedule interviews, collect feedback, track hiring decisions, and monitor recruitment analytics through a secure dashboard.
-
----
-
-# Backend Technology Stack
+### Backend
 
 * Java 21
-* Spring Boot 4
-* Spring Data JPA
-* Hibernate
-* MySQL
-* Maven
+* Spring Boot
 * Spring Security
 * JWT Authentication
-* BCrypt Password Encoding
-* Lombok
+* BCrypt Password Encryption
+* Spring Data JPA
+* MySQL
+* Maven
+
+### Frontend
+
+* React
+* Vite
+* TailwindCSS
+* Axios
+* React Router
+* React Icons
+
+### Theme
+
+Primary Color:
+#71A5DE (Airy Blue Delight)
 
 ---
 
-# Architecture
+# Backend Progress
 
-The backend follows a layered architecture:
+## Authentication
 
-Controller Layer
-↓
-Service Layer
-↓
-Repository Layer
-↓
-MySQL Database
+Completed:
 
-DTOs are used to separate API contracts from database entities.
+* User Registration
+* User Login
+* BCrypt Password Hashing
+* JWT Token Generation
+* JWT Validation
+* JWT Authentication Filter
+
+## Authorization
+
+Completed:
+
+* Role Based Access Control
+* ADMIN
+* RECRUITER
+* INTERVIEWER
+
+Protected APIs using:
+
+* @PreAuthorize
 
 ---
 
-# Implemented Modules
+## Candidate Module
 
-## Candidate Management
-
-Features:
+Completed:
 
 * Create Candidate
-* Get Candidate By ID
-* Get All Candidates
 * Update Candidate
 * Delete Candidate
-* Search Candidates
-* Pagination Support
-
-Entity:
-
-Candidate
-
-Fields:
-
-* Name
-* Email
-* Phone
-* College
-* Skills
+* Get Candidate By Id
+* Get All Candidates
+* Search Candidate
+* Pagination
 
 ---
 
-## Interview Management
+## Interview Module
 
-Features:
+Completed:
 
-* Schedule Interview
-* Get All Interviews
-* Get Interviews By Candidate
-* Get Interviews By Status
-* Get Interviews By Interviewer
-
-Entity:
-
-Interview
-
-Fields:
-
-* Title
-* Interviewer
-* Scheduled Time
-* Status
-* Mode
-* Meeting Link
-* Location
-* Notes
-
----
-
-## Interview Workflow
-
-Implemented interview state transitions:
-
-SCHEDULED
-→ COMPLETED
-→ SELECTED
-
-SCHEDULED
-→ COMPLETED
-→ REJECTED
-
-SCHEDULED
-→ CANCELLED
-
-Invalid state transitions are blocked.
+* Create Interview
+* Interview Status Management
+* Candidate Interview Mapping
 
 ---
 
 ## Feedback Module
 
-Features:
+Completed:
 
 * Submit Feedback
-* Get All Feedback
-* Get Feedback By Interview
-
-Business Rules:
-
-Feedback can only be submitted after an interview is completed.
-
-Entity:
-
-Feedback
-
-Fields:
-
-* Interviewer Name
-* Technical Score
-* Communication Score
-* Problem Solving Score
-* Recommendation
-* Comments
-
-Recommendation Enum:
-
-* STRONG_HIRE
-* HIRE
-* HOLD
-* REJECT
+* Get Feedbacks
+* Interview Feedback Mapping
 
 ---
 
 ## Dashboard Module
 
-Analytics API implemented.
-
-Metrics:
+Completed:
 
 * Total Candidates
 * Total Interviews
@@ -159,61 +103,62 @@ Metrics:
 * Selected Interviews
 * Rejected Interviews
 * Scheduled Interviews
-* Completed Interviews
 
-Endpoint:
+Dashboard API:
 
 GET /api/dashboard/stats
 
 ---
 
-# Authentication
+# Frontend Progress
 
-Implemented:
+## Authentication
 
-* User Registration
-* User Login
-* BCrypt Password Hashing
-* JWT Generation
-* JWT Validation
+Completed:
 
-Roles:
-
-* ADMIN
-* RECRUITER
-* INTERVIEWER
+* Login Page
+* JWT Storage
+* Protected Routes
+* Logout
 
 ---
 
-# Authorization
+## Layout
 
-Implemented Role-Based Access Control (RBAC)
+Completed:
 
-ADMIN:
-
-* Full Access
-
-RECRUITER:
-
-* Candidate Management
-* Interview Management
-* Dashboard Access
-
-INTERVIEWER:
-
-* Interview Access
-* Feedback Submission
-
-Protected using:
-
-* Spring Security
-* JWT Filter
-* SecurityContext
-* @PreAuthorize
+* Sidebar Navigation
+* Dashboard Layout
+* Shared Main Layout
+* Responsive Design
 
 ---
 
-# Database
+## Dashboard
+
+Completed:
+
+* Dashboard Statistics Cards
+* API Integration
+* Airy Blue Delight Theme
+
+---
+
+## Candidate Module
+
+Completed:
+
+* Candidate Table
+* Candidate Search
+* Pagination
+* Add Candidate Modal
+* Edit Candidate
+* Delete Candidate
+* Auto Refresh
+
+---
+
+# Current Database
 
 Tables:
 
@@ -222,57 +167,43 @@ Tables:
 * interviews
 * feedbacks
 
-Relationships:
-
-Candidate
-1 → N Interviews
-
-Interview
-1 → N Feedbacks
-
 ---
 
-# Sample Data
+# Next Phase
 
-Current Dataset:
+## Interviews Module
 
-Candidates: 5
+Planned:
 
-Interviews:
+* Interview List
+* Search Interviews
+* Add Interview
+* Edit Interview
+* Delete Interview
 
-* Selected: 1
-* Rejected: 1
-* Scheduled: 2
-* Completed: 1
+## Feedback Module
 
-Feedback Entries: 3
+Planned:
 
----
+* Feedback Management UI
 
-# Current Status
+## Deployment
 
-Backend MVP Complete
-
-Next Phase:
-
-* React Frontend
-* Dashboard UI
-* Candidate Management UI
-* Authentication UI
-* Deployment
-
-Target Stack:
+Planned:
 
 Frontend:
 
-* React
-* Vite
-* Tailwind CSS
-* React Router
-* Axios
+* Vercel
 
-Deployment:
+Backend:
 
-* Frontend: Vercel
-* Backend: Render / Railway
-* Database: MySQL
+* Render / Railway
+
+Database:
+
+* MySQL Cloud
+
+---
+
+Last Updated:
+June 2026

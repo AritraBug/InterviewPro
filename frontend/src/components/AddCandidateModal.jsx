@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function AddCandidateModal({
   isOpen,
   onClose,
-  onSubmit
+  onSubmit,
+  initialData
 }) {
 
   const [formData, setFormData] =
@@ -14,6 +15,26 @@ function AddCandidateModal({
       college: "",
       skills: ""
     });
+
+  useEffect(() => {
+
+    if (initialData) {
+
+      setFormData(initialData);
+
+    } else {
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        college: "",
+        skills: ""
+      });
+
+    }
+
+  }, [initialData]);
 
   if (!isOpen) {
     return null;
@@ -34,14 +55,6 @@ function AddCandidateModal({
     e.preventDefault();
 
     onSubmit(formData);
-
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      college: "",
-      skills: ""
-    });
 
   };
 
@@ -76,7 +89,11 @@ function AddCandidateModal({
             mb-6
           "
         >
-          Add Candidate
+          {
+            initialData
+              ? "Edit Candidate"
+              : "Add Candidate"
+          }
         </h2>
 
         <form
@@ -90,49 +107,49 @@ function AddCandidateModal({
 
           <input
             name="name"
-            placeholder="Name"
             value={formData.name}
             onChange={handleChange}
+            placeholder="Name"
             className="border p-3 rounded-xl"
           />
 
           <input
             name="email"
-            placeholder="Email"
             value={formData.email}
             onChange={handleChange}
+            placeholder="Email"
             className="border p-3 rounded-xl"
           />
 
           <input
             name="phone"
-            placeholder="Phone"
             value={formData.phone}
             onChange={handleChange}
+            placeholder="Phone"
             className="border p-3 rounded-xl"
           />
 
           <input
             name="college"
-            placeholder="College"
             value={formData.college}
             onChange={handleChange}
+            placeholder="College"
             className="border p-3 rounded-xl"
           />
 
           <input
             name="skills"
-            placeholder="Skills"
             value={formData.skills}
             onChange={handleChange}
+            placeholder="Skills"
             className="border p-3 rounded-xl"
           />
 
           <div
             className="
               flex
-              gap-3
               justify-end
+              gap-3
             "
           >
 
@@ -140,10 +157,10 @@ function AddCandidateModal({
               type="button"
               onClick={onClose}
               className="
+                border
                 px-4
                 py-2
                 rounded-xl
-                border
               "
             >
               Cancel

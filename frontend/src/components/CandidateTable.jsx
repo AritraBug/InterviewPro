@@ -1,5 +1,7 @@
 function CandidateTable({
-  candidates
+  candidates,
+  onEdit,
+  onDelete
 }) {
 
   return (
@@ -42,6 +44,10 @@ function CandidateTable({
               Skills
             </th>
 
+            <th className="p-4 text-left">
+              Actions
+            </th>
+
           </tr>
 
         </thead>
@@ -54,9 +60,7 @@ function CandidateTable({
 
                 <tr
                   key={candidate.id}
-                  className="
-                    border-b
-                  "
+                  className="border-b"
                 >
 
                   <td className="p-4">
@@ -73,6 +77,33 @@ function CandidateTable({
 
                   <td className="p-4">
                     {candidate.skills}
+                  </td>
+
+                  <td className="p-4">
+
+                    <button
+                      onClick={() =>
+                        onEdit(candidate)
+                      }
+                      className="
+                        mr-2
+                        text-blue-600
+                      "
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() =>
+                        onDelete(candidate.id)
+                      }
+                      className="
+                        text-red-600
+                      "
+                    >
+                      Delete
+                    </button>
+
                   </td>
 
                 </tr>

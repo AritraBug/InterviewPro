@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import MainLayout
   from "../layouts/MainLayout";
@@ -13,7 +12,9 @@ import AddCandidateModal
 import {
   getCandidatesPaginated,
   searchCandidates,
-  createCandidate
+  createCandidate,
+  updateCandidate,
+  deleteCandidate
 }
 from "../services/candidateService";
 
@@ -36,6 +37,10 @@ function Candidates() {
 
   const [showModal, setShowModal] =
     useState(false);
+
+  const [editingCandidate,
+    setEditingCandidate] =
+    useState(null);
 
   useEffect(() => {
 
@@ -121,17 +126,63 @@ function Candidates() {
       }
     };
 
+  const handleEditCandidate =
+    async (candidate) => {
+
+      try {
+
+        await updateCandidate(
+          editingCandidate.id,
+          candidate
+        );
+
+        setShowModal(false);
+
+        setEditingCandidate(
+          null
+        );
+
+        loadCandidates();
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    };
+
+  const handleDeleteCandidate =
+    async (id) => {
+
+      const confirmed =
+        window.confirm(
+          "Delete candidate?"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      try {
+
+        await deleteCandidate(id);
+
+        loadCandidates();
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+    };
+
   if (loading) {
 
     return (
 
       <MainLayout>
 
-        <div
-          className="
-            p-8
-          "
-        >
+        <div className="p-8">
           Loading Candidates...
         </div>
 
@@ -183,9 +234,15 @@ function Candidates() {
         <div className="mb-6">
 
           <button
-            onClick={() =>
-              setShowModal(true)
-            }
+            onClick={() => {
+
+              setEditingCandidate(
+                null
+              );
+
+              setShowModal(true);
+
+            }}
             className="
               px-5
               py-3
@@ -234,6 +291,18 @@ function Candidates() {
 
         <CandidateTable
           candidates={candidates}
+          onEdit={(candidate) => {
+
+            setEditingCandidate(
+              candidate
+            );
+
+            setShowModal(true);
+
+          }}
+          onDelete={
+            handleDeleteCandidate
+          }
         />
 
         <div
@@ -263,13 +332,11 @@ function Candidates() {
           </button>
 
           <span>
-
             Page {page + 1}
             {" "}
             of
             {" "}
             {totalPages}
-
           </span>
 
           <button
@@ -295,11 +362,22 @@ function Candidates() {
 
         <AddCandidateModal
           isOpen={showModal}
-          onClose={() =>
-            setShowModal(false)
+          initialData={
+            editingCandidate
           }
+          onClose={() => {
+
+            setShowModal(false);
+
+            setEditingCandidate(
+              null
+            );
+
+          }}
           onSubmit={
-            handleAddCandidate
+            editingCandidate
+              ? handleEditCandidate
+              : handleAddCandidate
           }
         />
 
