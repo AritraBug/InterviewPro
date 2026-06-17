@@ -3,7 +3,32 @@ function DashboardCard({
   value
 }) {
 
+  const getColor = () => {
+
+    switch (title) {
+
+      case "Selected":
+        return "#22C55E";
+
+      case "Rejected":
+        return "#EF4444";
+
+      case "Scheduled":
+        return "#F59E0B";
+
+      case "Completed":
+        return "#8B5CF6";
+
+      case "Cancelled":
+        return "#6B7280";
+
+      default:
+        return "#71A5DE";
+    }
+  };
+
   return (
+
     <div
       className="
         rounded-3xl
@@ -22,7 +47,7 @@ function DashboardCard({
       <h3
         className="text-sm"
         style={{
-          color: "#64748B",
+          color: "#64748B"
         }}
       >
         {title}
@@ -35,13 +60,14 @@ function DashboardCard({
           mt-3
         "
         style={{
-          color: "#71A5DE",
+          color: getColor()
         }}
       >
         {value}
       </p>
 
     </div>
+
   );
 }
 
